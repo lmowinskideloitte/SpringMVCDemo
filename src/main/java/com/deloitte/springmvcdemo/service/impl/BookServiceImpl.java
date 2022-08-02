@@ -27,9 +27,10 @@ public class BookServiceImpl implements BookService {
     public Book updateBook(Long id, Book book) {
         Book bookById = bookRepository.findBookById(id);
         if (bookById != null) {
+            System.out.println(bookById.getId());
             bookById.setAuthor(book.getAuthor());
             bookById.setTitle(book.getTitle());
-            return saveBook(book);
+            return saveBook(bookById);
         }
         return null;
     }

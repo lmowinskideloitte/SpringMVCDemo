@@ -4,8 +4,11 @@ import com.deloitte.springmvcdemo.entity.Book;
 import com.deloitte.springmvcdemo.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
 @RequestMapping(value = "/books")
@@ -26,7 +29,11 @@ public class BookController {
 
     @PutMapping(value = "/{id}")
     public Book updateBook(@PathVariable Long id, @Valid @RequestBody Book book) {
-        return bookService.updateBook(id, book);
+        Book res = bookService.updateBook(id, book);
+        if (res == null) {
+            throw new ResponseStatusException(NOT_FOUND, "Unable to find book with this id");
+        }
+        return res;
     }
 
     @DeleteMapping(value = "/{id}")
